@@ -22,7 +22,7 @@ AFRAME.registerComponent('details-listener', {
             var newCircle = document.createElement('a-circle');
             newCircle.setAttribute('radius', '0.25');
             newCircle.setAttribute('color', 'white');
-            newCircle.setAttribute('position', '1 0 1'); 
+            newCircle.setAttribute('position', '0 -1 0'); 
             newCircle.setAttribute('rotation', '0 45 0');
             newCircle.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 1000; easing: linear');
             newCircle.setAttribute('material', 'shader: flat; src: #gradient'); 
