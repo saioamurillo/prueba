@@ -20,14 +20,14 @@
                     <a-text value="Biological Danger" align="center" width="3" position="0 0 0.05" color="black"></a-text>
                     <a-entity position="0 -0.5 0.08">
                         <a-box id="details-box" width="1.5" height="0.5" depth="0.02" material="color: blue;"></a-box>
-                        <a-text id="details-text" value="Ver Detalles" align="center" width="2" position="0 0 0.05" color="white"></a-text>
+                        <a-text id="details-button" value="Ver detalles" align="center" width="2" position="0 0 0.06" color="white"></a-text> <!-- Aquí se agrega el plano con el texto -->
                     </a-entity>
                     <a-entity id="hide-details-entity" position="0 -0.5 0.08">
                     </a-entity>
                     <!-- Botón -->
                 </a-plane>
             </a-marker>
-            <a-entity camera cursor="rayOrigin: mouse;"></a-entity> <!-- Añadir el componente cursor a la cámara -->
+            <a-entity camera cursor="rayOrigin: mouse;" raycaster="objects: [details-listener]"></a-entity>
         </a-scene>
     </div>
 </body>
