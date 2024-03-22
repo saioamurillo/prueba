@@ -12,22 +12,29 @@ gradient.addColorStop(1, 'green');
 ctx.fillStyle = gradient;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// CLIC Y ANIMACIONES
+//CLIC Y ANIMACIONES
 
 AFRAME.registerComponent('details-listener', {
     init: function () {
         var el = this.el; 
-        var buttonClicked = false; // Variable para rastrear si se ha hecho clic en el botón
+        var buttonClicked = false;
+        var detailsButton = document.querySelector('#details-button');
+        var planoAzul = document.querySelector('#details-box')
 
         el.addEventListener('click', function (evt) {
             if (!buttonClicked) { 
                 console.log("Clic detectado en Ver Detalles."); 
                 buttonClicked = true; 
 
+                detailsButton.setAttribute('value', 'Ocultar detalles'); // Cambiar el texto a "Ocultar detalles"
+               planoAzul.setAttribute("color", "gray")
+
+                // Agregar el círculo y las esferas
                 var newCircle = document.createElement('a-circle');
+                newCircle.setAttribute('id', 'new-circle'); // Agregar un ID para identificarlo fácilmente
                 newCircle.setAttribute('radius', '0.25');
                 newCircle.setAttribute('color', 'white');
-                newCircle.setAttribute('position', '0 -0.8 0'); 
+                newCircle.setAttribute('position', '0 -0.7 0'); 
                 newCircle.setAttribute('rotation', '0 45 0');
                 newCircle.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 1000; easing: linear');
                 newCircle.setAttribute('material', 'shader: flat; src: #gradient'); 
@@ -39,7 +46,6 @@ AFRAME.registerComponent('details-listener', {
                 newText.setAttribute('color', 'black');
                 newText.setAttribute('scale', '0.3 0.3 0.3'); 
                 newCircle.appendChild(newText);
-
 
                 var radius = 0.35; 
                 var numSpheres = 8; 
@@ -53,24 +59,24 @@ AFRAME.registerComponent('details-listener', {
                     sphere.setAttribute('radius', '0.05');
                     sphere.setAttribute('color', 'green');
                     sphere.setAttribute('position', x + ' ' + y + ' 0'); 
-                    sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear; loop: true'); // Animación de rotación constante
+                    sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear; loop: true'); 
                     newCircle.appendChild(sphere);
                 }
 
                 el.parentNode.appendChild(newCircle); 
 
-                var newButton = document.createElement('a-entity');
-                newButton.innerHTML = `
-                    <a-box id="hide-details-box" width="1.5" height="0.15" depth="0.02" position="0 -0.33 0" material="color: red;"></a-box>
-                    <a-text id="hide-details-text" value="Ocultar Detalles" align="center" width="2" position="0 -0.33 0.02" color="white"></a-text>
-                `;
-                newButton.setAttribute('id', 'hide-details-entity');
-                newButton.addEventListener('click', function() {
-                    el.parentNode.removeChild(newCircle); 
-                    el.parentNode.removeChild(newButton); 
-                    buttonClicked = false; 
-                });
-                el.parentNode.appendChild(newButton); 
+            } else {
+                console.log("Clic detectado en Ocultar Detalles.");
+                buttonClicked = false;
+
+                detailsButton.setAttribute('value', 'Ver detalles'); // Cambiar el texto a "Ver detalles"
+                planoAzul.setAttribute("color", "blue")
+                
+                // Eliminar el círculo y las esferas si existen
+                var newCircle = document.querySelector('#new-circle');
+                if (newCircle) {
+                    newCircle.parentNode.removeChild(newCircle);
+                }
             }
         });
     }
@@ -82,3 +88,4 @@ document.addEventListener('DOMContentLoaded', function () {
         detailsBox.setAttribute('details-listener', '');
     }
 });
+
