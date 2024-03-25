@@ -21,6 +21,7 @@ AFRAME.registerComponent('details-listener', {
         var detailsButton = document.querySelector('#details-button');
         var planoAzul = document.querySelector('#details-box')
 
+
         el.addEventListener('click', function (evt) {
             if (!buttonClicked) { 
                 console.log("Clic detectado en Ver Detalles."); 
@@ -70,7 +71,7 @@ AFRAME.registerComponent('details-listener', {
                 buttonClicked = false;
 
                 detailsButton.setAttribute('value', 'Ver detalles'); // Cambiar el texto a "Ver detalles"
-                planoAzul.setAttribute("color", "blue")
+                planoAzul.setAttribute("color", "green")
                 
                 // Eliminar el círculo y las esferas si existen
                 var newCircle = document.querySelector('#new-circle');
@@ -82,10 +83,32 @@ AFRAME.registerComponent('details-listener', {
     }
 });
 
+
+// Configurar el raycaster
+document.addEventListener('DOMContentLoaded', function () {
+    var sceneEl = document.querySelector('a-scene');
+    sceneEl.addEventListener('loaded', function () {
+        var raycasterEl = document.querySelector('[raycaster]');
+        raycasterEl.setAttribute('raycaster', 'objects: .clickable');
+    });
+});
+
+// Escucha cambios en la posición del objeto detectado (planoAzul)
+var planoAzul = document.querySelector('#details-box');
+planoAzul.addEventListener('componentchanged', function (evt) {
+    if (evt.detail.name === 'position') {
+        // Cuando la posición de planoAzul cambie, actualiza la posición del botón "Ver detalles"
+        var newPosition = planoAzul.getAttribute('position');
+        detailsButton.setAttribute('position', newPosition);
+    }
+});
+
+// Agregar el componente 'details-listener'
 document.addEventListener('DOMContentLoaded', function () {
     var detailsBox = document.querySelector('#details-box');
     if (detailsBox) {
         detailsBox.setAttribute('details-listener', '');
     }
 });
+
 
