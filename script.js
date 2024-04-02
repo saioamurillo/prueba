@@ -13,17 +13,8 @@ AFRAME.registerComponent('details-listener', {
         var el = this.el; 
         console.log("init");
 
-navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(function (stream) {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = "es-ES";
-        const inputNode = audioContext.createMediaStreamSource(stream);
-        const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 2048;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        inputNode.connect(analyser);
         recognition.onstart = function () {
             console.log("El reconocimiento de voz ha comenzado");
         };
@@ -34,14 +25,11 @@ navigator.mediaDevices.getUserMedia({ audio: true })
         recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript;
             console.log("Texto reconocido:", transcript);
-            const textoNormalizado = transcript
-                .toLowerCase()
-                .replace(/[^\w\s]/gi, "");
+            const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
             if (textoNormalizado.includes("ver detalles covid")) {
                 console.log("Te he escuchado");
                 
-                const token =
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMTM1OTk4NiwiZXhwIjoxNzExOTY0Nzg2LCJpYXQiOjE3MTEzNTk5ODZ9.7DL7B5eudtcZANhgXVexHDOqE4yzj1ijozpbkVXfyqc";
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
@@ -56,62 +44,45 @@ navigator.mediaDevices.getUserMedia({ audio: true })
                     })
                     .catch((error) => console.error(error));
                     
-                } else if (textoNormalizado.includes("ver detalles adn")) {
-                    console.log("Te he escuchado");
-                
-                    const token =
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMTM1OTk4NiwiZXhwIjoxNzExOTY0Nzg2LCJpYXQiOjE3MTEzNTk5ODZ9.7DL7B5eudtcZANhgXVexHDOqE4yzj1ijozpbkVXfyqc";
-                    const headers = {
-                        Authorization: `Bearer ${token}`,
-                    };
-                    fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
-                        method: "GET",
-                        headers: headers,
+            } else if (textoNormalizado.includes("ver detalles ADN")) {
+                console.log("Te he escuchado");
+            
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+                fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
+                    method: "GET",
+                    headers: headers,
+                })
+                    .then((res) => res.json())
+                    .then((res) => {
+                        console.log(res);
+                        visualizacionADN('adn-marker', res);                      
                     })
-                        .then((res) => res.json())
-                        .then((res) => {
-                            console.log(res);
-                            visualizacionADN('adn-marker', res);                      
-                        })
-                        .catch((error) => console.error(error));
-                
-                
-                }else if (textoNormalizado.includes("ocultar detalles covid")) {
-                    console.log("Ocultar detalles Covid");
-                
-                    var circleToRemove = document.getElementById('new-circle-covid');
-                    if (circleToRemove) {
-                        circleToRemove.parentNode.removeChild(circleToRemove);
-                    }
-                }else if (textoNormalizado.includes("ocultar detalles adn")) {
-                    console.log("Ocultar detalles ADN");
-                
-                    var circleToRemove = document.getElementById('new-circle-adn');
-                    if (circleToRemove) {
-                        circleToRemove.parentNode.removeChild(circleToRemove);
-                    }
-                    
-        }
-
+                    .catch((error) => console.error(error));
+            
+            
+            } else if (textoNormalizado.includes("ocultar detalles covid")) {
+                console.log("Ocultar detalles Covid");
+            
+                var circleToRemove = document.getElementById('new-circle-covid');
+                if (circleToRemove) {
+                    circleToRemove.parentNode.removeChild(circleToRemove);
+                }
+            } else if (textoNormalizado.includes("ocultar detalles adn")) {
+                console.log("Ocultar detalles ADN");
+            
+                var circleToRemove = document.getElementById('new-circle-adn');
+                if (circleToRemove) {
+                    circleToRemove.parentNode.removeChild(circleToRemove);
+                }
+            }
         };
-
         recognition.onerror = function (event) {
             console.error("Error de reconocimiento de voz:", event.error);
         };
-
-        function visualize() {
-            analyser.getByteTimeDomainData(dataArray);
-            requestAnimationFrame(visualize);
-        }
-        visualize();
         recognition.start();
-
-
-    })
-    
-    .catch(function (err) {
-        console.error("Error al obtener el flujo de audio:", err);
-    });
 
     function visualizacion(objeto) {
 
