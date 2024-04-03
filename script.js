@@ -14,78 +14,75 @@ AFRAME.registerComponent('details-listener', {
         console.log("init");
 
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.lang = "es-ES";
-recognition.onstart = function () {
-    console.log("El reconocimiento de voz ha comenzado");
-};
-recognition.onend = function () {
-    console.log("El reconocimiento de voz ha terminado. Reiniciando...");
-    recognition.start();
-};
-recognition.onresult = function (event) {
-    
-    const transcript = event.results[0][0].transcript;
-    if (transcript){
-    console.log("Texto reconocido:", transcript);
-    const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
-    if (textoNormalizado.includes("ver detalles covid")) {
-        console.log("Te he escuchado");
-        
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjEzMzE3OCwiZXhwIjoxNzEyNzM3OTc4LCJpYXQiOjE3MTIxMzMxNzh9.KLExGMqsC_NonwTX91nVuJeUTWeBNHhbNYUWmX5H3RA";
-        const headers = {
-            Authorization: `Bearer ${token}`,
+        recognition.lang = "es-ES";
+        recognition.onstart = function () {
+            console.log("El reconocimiento de voz ha comenzado");
         };
-        fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
-            method: "GET",
-            headers: headers,
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res);
-                          
-            })
-            .catch((error) => console.error(error));
+        recognition.onend = function () {
+            console.log("El reconocimiento de voz ha terminado. Reiniciando...");
+            recognition.start();
+        };
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            console.log("Texto reconocido:", transcript);
+            const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
+            if (textoNormalizado.includes("ver detalles covid")) {
+                console.log("Te he escuchado");
+                
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+                fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
+                    method: "GET",
+                    headers: headers,
+                })
+                    .then((res) => res.json())
+                    .then((res) => {
+                        console.log(res);
+                        visualizacion(res);                      
+                    })
+                    .catch((error) => console.error(error));
+                    
+            } else if (textoNormalizado.includes("ver detalles ADN")) {
+                console.log("Te he escuchado");
             
-    } else if (textoNormalizado.includes("ver detalles ADN")) {
-        console.log("Te he escuchado");
-    
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjEzMzE3OCwiZXhwIjoxNzEyNzM3OTc4LCJpYXQiOjE3MTIxMzMxNzh9.KLExGMqsC_NonwTX91nVuJeUTWeBNHhbNYUWmX5H3RA";
-        const headers = {
-            Authorization: `Bearer ${token}`,
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+                fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
+                    method: "GET",
+                    headers: headers,
+                })
+                    .then((res) => res.json())
+                    .then((res) => {
+                        console.log(res);
+                        visualizacionADN('adn-marker', res);                      
+                    })
+                    .catch((error) => console.error(error));
+            
+            
+            } else if (textoNormalizado.includes("ocultar detalles covid")) {
+                console.log("Ocultar detalles Covid");
+            
+                var circleToRemove = document.getElementById('new-circle-covid');
+                if (circleToRemove) {
+                    circleToRemove.parentNode.removeChild(circleToRemove);
+                }
+            } else if (textoNormalizado.includes("ocultar detalles adn")) {
+                console.log("Ocultar detalles ADN");
+            
+                var circleToRemove = document.getElementById('new-circle-adn');
+                if (circleToRemove) {
+                    circleToRemove.parentNode.removeChild(circleToRemove);
+                }
+            }
         };
-        fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
-            method: "GET",
-            headers: headers,
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res);
-                               
-            })
-            .catch((error) => console.error(error));
-    
-    
-    } else if (textoNormalizado.includes("ocultar detalles covid")) {
-        console.log("Ocultar detalles Covid");
-    
-        var circleToRemove = document.getElementById('new-circle-covid');
-        if (circleToRemove) {
-            circleToRemove.parentNode.removeChild(circleToRemove);
-        }
-    } else if (textoNormalizado.includes("ocultar detalles adn")) {
-        console.log("Ocultar detalles ADN");
-    
-        var circleToRemove = document.getElementById('new-circle-adn');
-        if (circleToRemove) {
-            circleToRemove.parentNode.removeChild(circleToRemove);
-        }
-    }
-}
-};
-recognition.onerror = function (event) {
-    console.error("Error de reconocimiento de voz:", event.error);
-};
-recognition.start();
+        recognition.onerror = function (event) {
+            console.error("Error de reconocimiento de voz:", event.error);
+        };
+        recognition.start();
 
     function visualizacion(objeto) {
 
@@ -173,6 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
         detailsBox.setAttribute('details-listener', '');
     }
 });
+    
+
+    
     
 
     
