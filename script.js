@@ -31,7 +31,7 @@ recognition.onresult = function (event) {
     if (textoNormalizado.includes("ver detalles covid")) {
         console.log("Te he escuchado");
         
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjEzMzE3OCwiZXhwIjoxNzEyNzM3OTc4LCJpYXQiOjE3MTIxMzMxNzh9.KLExGMqsC_NonwTX91nVuJeUTWeBNHhbNYUWmX5H3RA";
         const headers = {
             Authorization: `Bearer ${token}`,
         };
@@ -49,7 +49,7 @@ recognition.onresult = function (event) {
     } else if (textoNormalizado.includes("ver detalles ADN")) {
         console.log("Te he escuchado");
     
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjEzMzE3OCwiZXhwIjoxNzEyNzM3OTc4LCJpYXQiOjE3MTIxMzMxNzh9.KLExGMqsC_NonwTX91nVuJeUTWeBNHhbNYUWmX5H3RA";
         const headers = {
             Authorization: `Bearer ${token}`,
         };
