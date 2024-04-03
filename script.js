@@ -8,7 +8,9 @@ recognition.onend = function () {
     recognition.start();
 };
 recognition.onresult = function (event) {
+    
     const transcript = event.results[0][0].transcript;
+    if (transcript){
     console.log("Texto reconocido:", transcript);
     const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
     if (textoNormalizado.includes("ver detalles covid")) {
@@ -63,6 +65,7 @@ recognition.onresult = function (event) {
             circleToRemove.parentNode.removeChild(circleToRemove);
         }
     }
+}
 };
 recognition.onerror = function (event) {
     console.error("Error de reconocimiento de voz:", event.error);
