@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 html, body {
     margin: 0;
     padding: 0;
@@ -12,7 +14,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* Agregamos esta línea para posicionar elementos relativamente */
+    position: relative; 
 }
 
 a-scene {
@@ -35,6 +37,77 @@ body
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+#dictado {
+  position: fixed;
+  bottom: 70px; 
+  left: 50%;
+  transform: translateX(-50%);
+  backdrop-filter: blur(20px); 
+  padding: 10px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 80%; 
+  box-shadow:  0px 0px 40px 40px #dba53200;
+
+}
+
+#dictado h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  color: white;
+}
+
+#dictado h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  color: white;
+}
+.sound-wave-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sound-wave {
+  display: flex;
+  align-items: flex-end;
+  height: 100px; /* Altura ajustable */
+}
+
+.bar {
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff; /* Blanco */
+  margin: 0 3px;
+  position: relative;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Sombra blanca */
+  animation: wave-animation 1s infinite ease-out alternate;
+
+}
+@keyframes wave-animation {
+  0% {
+    height: 10px;
+    transform: translateY(0);
+  }
+  50% {
+    height: 50px;
+    transform: translateY(15px);
+  }
+  100% {
+    height: 10px;
+    transform: translateY(0);
+  }
+}
+
+
 
 
 
