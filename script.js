@@ -26,7 +26,7 @@ AFRAME.registerComponent('details-listener', {
             const transcript = event.results[0][0].transcript;
             console.log("Texto reconocido:", transcript);
             const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
-            if (textoNormalizado.includes("ver detalles")) {
+            if (textoNormalizado.includes("ver detalles covid")) {
                 console.log("Te he escuchado");
                 
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
