@@ -1,3 +1,4 @@
+
 var canvas = document.getElementById('gradient');
 var ctx = canvas.getContext('2d');
 canvas.width = 256;
@@ -25,6 +26,11 @@ AFRAME.registerComponent('details-listener', {
         recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript;
             console.log("Texto reconocido:", transcript);
+            document.querySelector("#dictado").innerHTML = `
+            <h1>He escuchado:</h1>
+            <br>
+            <h2>"${transcript}"</h2>
+            `
             const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
             if (textoNormalizado.includes("ver detalles covid")) {
                 console.log("Te he escuchado");
@@ -62,7 +68,36 @@ AFRAME.registerComponent('details-listener', {
                     })
                     .catch((error) => console.error(error));
             
-            
+            }else if(textoNormalizado.includes("ver incidencias")){
+                    console.log("Te he escuchado");
+                    
+                    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
+                    const headers = {
+                        Authorization: `Bearer ${token}`,
+                    };
+                    fetch("https://207.180.229.60:9443/v1/api/INCIDENCIAS_MUESTRAS/7063", {
+                        method: "GET",
+                        headers: headers,
+                    })
+                        .then((res) => res.json())
+                        .then((res) => {
+                            console.log(res);
+                            visualizacionMues('virus-marker', res);
+                            if (res.document.INCMUESTRA_INCID_ID) {
+                                fetch(`https://207.180.229.60:9443/v1/api/INCIDENCIAS/${res.document.INCMUESTRA_INCID_ID}`, {
+                                    method: "GET",
+                                    headers: headers,
+                                })
+                                    .then((res) => res.json())
+                                    .then((res) => {
+                                        console.log(res);
+                                        visualizacionInc('virus-marker', res);
+                                    })
+                                    .catch((error) => console.error(error));
+                            }
+                        })
+                        .catch((error) => console.error(error));
+
             } else if (textoNormalizado.includes("ocultar detalles covid")) {
                 console.log("Ocultar detalles Covid");
             
@@ -78,16 +113,17 @@ AFRAME.registerComponent('details-listener', {
                     circleToRemove.parentNode.removeChild(circleToRemove);
                 }
             }
+
         };
+
+        
         recognition.onerror = function (event) {
             console.error("Error de reconocimiento de voz:", event.error);
         };
-        recognition.start();
+        recognition.start()
 
     function visualizacion(objeto) {
 
-
-        
         var newCircle = document.createElement('a-circle');
         newCircle.setAttribute('id', 'new-circle-covid'); 
         newCircle.setAttribute('radius', '0.25');
@@ -159,6 +195,52 @@ AFRAME.registerComponent('details-listener', {
         }
         marker.appendChild(newCircle);
     }
+    function visualizacionMues(markerId, objeto){
+        const marker = document.getElementById(markerId);
+        if (!marker) return;
+
+        var newCircle = document.createElement('a-circle');
+        newCircle.setAttribute('id', 'new-circle-adn'); 
+        newCircle.setAttribute('radius', '0.3');
+        newCircle.setAttribute('color', 'blue');
+        newCircle.setAttribute('position', '-1.5 0 0'); 
+        newCircle.setAttribute('rotation', '-90 0 0');
+        newCircle.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
+
+        var newText = document.createElement('a-text');
+        newText.setAttribute('value',`${objeto.message}\nID:\n${objeto.document.INCMUESTRA_ID}\nIncid. ID:\n${objeto.document.INCMUESTRA_INCID_ID}\nMues. ID:\n${objeto.document.INCMUESTRA_MUESTRA_ID}`); 
+        newText.setAttribute('align', 'center');
+        newText.setAttribute('position', '0 0 0.05');
+        newText.setAttribute('color', 'white');
+        newText.setAttribute('scale', '0.3 0.3 0.3'); 
+        newCircle.appendChild(newText);
+
+        marker.appendChild(newCircle);
+    }
+    function visualizacionInc(markerId, objeto){
+        const marker = document.getElementById(markerId);
+        if (!marker) return;
+        var newPlane = document.createElement('a-plane');
+        newPlane.setAttribute('id', 'new-circle-adn'); 
+        newPlane.setAttribute('width', '1.2');
+        newPlane.setAttribute('height', '0.4');
+        newPlane.setAttribute('color', 'red');
+        newPlane.setAttribute('position', '-1.5 0 0.5'); 
+        newPlane.setAttribute('rotation', '-90 0 0');
+        newPlane.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
+
+        var newText = document.createElement('a-text');
+        newText.setAttribute('value',`Codigo:${objeto.document.INCID_CODIGO}\nNombre:\n${objeto.document.TINCID_NOMBRE}\nDescripcion:\n${objeto.document.INCID_DESC}`);
+        newText.setAttribute('align', 'center');
+        newText.setAttribute('position', '0 0 0.05');
+        newText.setAttribute('color', 'white');
+        newText.setAttribute('scale', '0.3 0.3 0.3'); 
+        newPlane.appendChild(newText);
+
+        marker.appendChild(newPlane);
+    }
+
+    
 }
     
 })
@@ -171,6 +253,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
     
+// document.addEventListener("DOMContentLoaded", function() {
+//     let bars = document.querySelectorAll(".bar");
+//     bars.forEach(function(bar) {
+//       bar.style.animationDelay = Math.random() + "s";
+//     });
+//   });
+  
 
     
     
