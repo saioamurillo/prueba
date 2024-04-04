@@ -252,13 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
         detailsBox.setAttribute('details-listener', '');
     }
 });
-    
-// document.addEventListener("DOMContentLoaded", function() {
-//     let bars = document.querySelectorAll(".bar");
-//     bars.forEach(function(bar) {
-//       bar.style.animationDelay = Math.random() + "s";
-//     });
-//   });
   
 
     
