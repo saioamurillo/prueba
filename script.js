@@ -33,7 +33,7 @@ AFRAME.registerComponent('details-listener', {
             arText1.setAttribute('value', `Audio reconocido:\n${transcript}`);
 
             const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
-            if (textoNormalizado.includes("detalles caja")) {
+            if (textoNormalizado.includes("detalles caja 7063" || "detalles caja siete cero seis tres")) {
                 console.log("Te he escuchado");
                 
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
@@ -53,7 +53,7 @@ AFRAME.registerComponent('details-listener', {
                     
             
             
-            }else if(textoNormalizado.includes("detalles muestra")){
+            }else if(textoNormalizado.includes("detalles muestra 9647 || detalles muestra nueve seis cuatro siete")){
                     console.log("Te he escuchado");
                     
                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
