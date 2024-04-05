@@ -26,13 +26,14 @@ AFRAME.registerComponent('details-listener', {
         recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript;
             console.log("Texto reconocido:", transcript);
-            document.querySelector("#dictado").innerHTML = `
-            <h1>He escuchado:</h1>
-            <br>
-            <h2>"${transcript}"</h2>
-            `
+
+            const arText = document.querySelector("#ar-transcript");
+            arText.setAttribute('value', `Audio reconocido:\n${transcript}`);
+            const arText1 = document.querySelector("#ar-transcript1");
+            arText1.setAttribute('value', `Audio reconocido:\n${transcript}`);
+
             const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
-            if (textoNormalizado.includes("ver detalles covid")) {
+            if (textoNormalizado.includes("detalles caja 7063")) {
                 console.log("Te he escuchado");
                 
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
@@ -68,7 +69,7 @@ AFRAME.registerComponent('details-listener', {
                     })
                     .catch((error) => console.error(error));
             
-            }else if(textoNormalizado.includes("ver incidencias")){
+            }else if(textoNormalizado.includes("detalles muestra 9647")){
                     console.log("Te he escuchado");
                     
                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
@@ -82,8 +83,9 @@ AFRAME.registerComponent('details-listener', {
                         .then((res) => res.json())
                         .then((res) => {
                             console.log(res);
-                            visualizacionMues('virus-marker', res);
-                            if (res.document.INCMUESTRA_INCID_ID) {
+                            visualizacionMues('adn-marker', res);
+
+                            if (res.document.INCMUESTRA_INCID_ID ) {
                                 fetch(`https://207.180.229.60:9443/v1/api/INCIDENCIAS/${res.document.INCMUESTRA_INCID_ID}`, {
                                     method: "GET",
                                     headers: headers,
@@ -91,19 +93,28 @@ AFRAME.registerComponent('details-listener', {
                                     .then((res) => res.json())
                                     .then((res) => {
                                         console.log(res);
-                                        visualizacionInc('virus-marker', res);
+
+                                        visualizacionInc('adn-marker', res);
                                     })
                                     .catch((error) => console.error(error));
                             }
                         })
                         .catch((error) => console.error(error));
 
-            } else if (textoNormalizado.includes("ocultar detalles covid")) {
-                console.log("Ocultar detalles Covid");
+            } else if (textoNormalizado.includes("ocultar")) {
             
-                var circleToRemove = document.getElementById('new-circle-covid');
-                if (circleToRemove) {
-                    circleToRemove.parentNode.removeChild(circleToRemove);
+                var plane1ToRemove = document.getElementById('plane1');
+                var plane2ToRemove = document.getElementById('plane2')
+                var plane3ToRemove = document.getElementById('plane3')
+                var newPlaneToRemove = document.getElementById('new-plane')
+
+
+                if (plane1ToRemove&&plane2ToRemove&&plane3ToRemove&&newPlaneToRemove) {
+                    plane1ToRemove.parentNode.removeChild(plane1ToRemove);
+                    plane2ToRemove.parentNode.removeChild(plane2ToRemove);
+                    plane3ToRemove.parentNode.removeChild(plane3ToRemove);
+                    newPlaneToRemove.parentNode.removeChild(newPlaneToRemove);
+
                 }
             } else if (textoNormalizado.includes("ocultar detalles adn")) {
                 console.log("Ocultar detalles ADN");
@@ -122,123 +133,150 @@ AFRAME.registerComponent('details-listener', {
         };
         recognition.start()
 
-    function visualizacion(objeto) {
+        function visualizacion(objeto) {
+            var plane1 = document.createElement('a-plane');
+            plane1.setAttribute('id', 'plane1');
+            plane1.setAttribute('position', '0 0 0.2');
+            plane1.setAttribute('rotation', '0 0 0');
+            plane1.setAttribute('width', '1');
+            plane1.setAttribute('height', '0.2');
+            plane1.setAttribute('color', 'gray');
+            plane1.setAttribute('animation', 'property: position; to: 0 -0.9 0.5; dur: 1000; easing: easeOutCubic');
 
-        var newCircle = document.createElement('a-circle');
-        newCircle.setAttribute('id', 'new-circle-covid'); 
-        newCircle.setAttribute('radius', '0.25');
-        newCircle.setAttribute('color', 'white');
-        newCircle.setAttribute('position', '0 -1.2 0'); 
-        newCircle.setAttribute('rotation', '0 45 0');
-        newCircle.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 1000; easing: linear');
-        newCircle.setAttribute('material', 'shader: flat; src: #gradient'); 
 
-        var newText = document.createElement('a-text');
-        newText.setAttribute('value',`Code:${objeto.code}\n${objeto.message}\n${objeto.document.CAJA_ID}`); 
-        newText.setAttribute('align', 'center');
-        newText.setAttribute('position', '0 0 0.05');
-        newText.setAttribute('color', 'black');
-        newText.setAttribute('scale', '0.3 0.3 0.3'); 
-        newCircle.appendChild(newText);
+            var text1 = document.createElement('a-text');
+            text1.setAttribute('value', `Caja ID: ${objeto.document.CAJA_ID}`);
+            text1.setAttribute('align', 'center');
+            text1.setAttribute('position', '0 0 0.05');
+            text1.setAttribute('color', 'white');
+            text1.setAttribute('scale', '0.3 0.3 0.3');
+            plane1.appendChild(text1);
 
-        var radius = 0.35; 
-        var numSpheres = 8; 
-        var angleIncrement = (2 * Math.PI) / numSpheres; 
-        for (var i = 0; i < numSpheres; i++) {
-            var angle = i * angleIncrement; 
-            var x = radius * Math.cos(angle); 
-            var y = radius * Math.sin(angle); 
+            var plane2 = document.createElement('a-plane');
+            plane2.setAttribute('id', 'plane2');
+            plane2.setAttribute('position', '0 0 0.2');
+            plane2.setAttribute('rotation', '0 0 0');
+            plane2.setAttribute('width', '1');
+            plane2.setAttribute('height', '0.2');
+            plane2.setAttribute('color', 'gray');
+            plane2.setAttribute('animation', 'property: position; to: 0 -1.2 0.5; dur: 1000; easing: easeOutCubic');
 
-            var sphere = document.createElement('a-sphere');
-            sphere.setAttribute('radius', '0.05');
-            sphere.setAttribute('color', 'green');
-            sphere.setAttribute('position', x + ' ' + y + ' 0'); 
-            sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear; loop: true'); 
-            newCircle.appendChild(sphere);
+
+            var text2 = document.createElement('a-text');
+            text2.setAttribute('value', `${objeto.document.FINCAJAL_DESC}`);
+            text2.setAttribute('align', 'center');
+            text2.setAttribute('position', '0 0 0.05');
+            text2.setAttribute('color', 'white');
+            text2.setAttribute('scale', '0.3 0.3 0.3');
+            plane2.appendChild(text2);
+
+            var plane3 = document.createElement('a-plane');
+            plane3.setAttribute('id', 'plane3');
+            plane3.setAttribute('position', '0 0 0.2');
+            plane3.setAttribute('rotation', '0 0 0');
+            plane3.setAttribute('width', '1');
+            plane3.setAttribute('height', '0.2');
+            plane3.setAttribute('color', 'gray');
+            plane3.setAttribute('animation', 'property: position; to: 0 -1.5 0.5; dur: 1000; easing: easeOutCubic');
+
+            var text3 = document.createElement('a-text');
+            text3.setAttribute('value', `Nombre: ${objeto.document.PROC_NOMBRE}`);
+            text3.setAttribute('align', 'center');
+            text3.setAttribute('position', '0 0 0.05');
+            text3.setAttribute('color', 'white');
+            text3.setAttribute('scale', '0.3 0.3 0.3');
+            plane3.appendChild(text3);
+
+            el.parentNode.appendChild(plane1);
+            el.parentNode.appendChild(plane2);
+            el.parentNode.appendChild(plane3);
+
         }
-    
-        el.parentNode.appendChild(newCircle); 
-    }
-    function visualizacionADN(markerId, objeto) {
-        const marker = document.getElementById(markerId);
-        if (!marker) return;
+       
+        function visualizacionMues(markerId, objeto) {
+            const marker = document.getElementById(markerId);
+            if (!marker) return;
+            var plane1 = document.createElement('a-plane');
+            plane1.setAttribute('id', 'plane1');
+            plane1.setAttribute('position', '0 0 0.2');
+            plane1.setAttribute('rotation', '-90 0 0');
+            plane1.setAttribute('width', '1');
+            plane1.setAttribute('height', '0.2');
+            plane1.setAttribute('color', 'gray');
+            plane1.setAttribute('animation', 'property: position; to: 0 0.5 0.9; dur: 1000; easing: easeOutCubic');
 
-        var newCircle = document.createElement('a-circle');
-        newCircle.setAttribute('id', 'new-circle-adn'); 
-        newCircle.setAttribute('radius', '0.25');
-        newCircle.setAttribute('color', 'violet');
-        newCircle.setAttribute('position', '0 0 1'); 
-        newCircle.setAttribute('rotation', '-90 0 0');
-        newCircle.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
 
-        var newText = document.createElement('a-text');
-        newText.setAttribute('value',`Code:${objeto.code}\n${objeto.message}\n${objeto.document.CAJA_ID}`); 
-        newText.setAttribute('align', 'center');
-        newText.setAttribute('position', '0 0 0.05');
-        newText.setAttribute('color', 'black');
-        newText.setAttribute('scale', '0.3 0.3 0.3'); 
-        newCircle.appendChild(newText);
+            var text1 = document.createElement('a-text');
+            text1.setAttribute('value', `ID: ${objeto.document.INCMUESTRA_ID}`);
+            text1.setAttribute('align', 'center');
+            text1.setAttribute('position', '0 0 0.05');
+            text1.setAttribute('color', 'white');
+            text1.setAttribute('scale', '0.3 0.3 0.3');
+            plane1.appendChild(text1);
 
-        const radius = 0.35;
-        const numSpheres = 8;
-        const angleIncrement = (2 * Math.PI) / numSpheres;
-        for (let i = 0; i < numSpheres; i++) {
-            const angle = i * angleIncrement;
-            const x = radius * Math.cos(angle);
-            const y = radius * Math.sin(angle);
-            const sphere = document.createElement('a-sphere');
-            sphere.setAttribute('radius', '0.05');
-            sphere.setAttribute('color', 'purple');
-            sphere.setAttribute('position', `${x} ${y} 0`);
-            sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear; loop: true');
-            newCircle.appendChild(sphere);
+            var plane2 = document.createElement('a-plane');
+            plane2.setAttribute('id', 'plane2');
+            plane2.setAttribute('position', '0 0 0.2');
+            plane2.setAttribute('rotation', '-90 0 0');
+            plane2.setAttribute('width', '1');
+            plane2.setAttribute('height', '0.2');
+            plane2.setAttribute('color', 'gray');
+            plane2.setAttribute('animation', 'property: position; to: 0 0.5 1.2; dur: 1000; easing: easeOutCubic');
+
+
+            var text2 = document.createElement('a-text');
+            text2.setAttribute('value', `Muestra ID: ${objeto.document.INCMUESTRA_MUESTRA_ID}`);
+            text2.setAttribute('align', 'center');
+            text2.setAttribute('position', '0 0 0.05');
+            text2.setAttribute('color', 'white');
+            text2.setAttribute('scale', '0.3 0.3 0.3');
+            plane2.appendChild(text2);
+
+            var plane3 = document.createElement('a-plane');
+            plane3.setAttribute('id', 'plane3');
+            plane3.setAttribute('position', '0 0 0.2');
+            plane3.setAttribute('rotation', '-90 0 0');
+            plane3.setAttribute('width', '1');
+            plane3.setAttribute('height', '0.2');
+            plane3.setAttribute('color', 'red');
+            plane3.setAttribute('animation', 'property: position; to: 0 0.5 1.5; dur: 1000; easing: easeOutCubic');
+
+            var text3 = document.createElement('a-text');
+            text3.setAttribute('value', `Incidencia ID: ${objeto.document.INCMUESTRA_INCID_ID}`);
+            text3.setAttribute('align', 'center');
+            text3.setAttribute('position', '0 0 0.05');
+            text3.setAttribute('color', 'white');
+            text3.setAttribute('scale', '0.3 0.3 0.3');
+            plane3.appendChild(text3);
+
+            marker.appendChild(plane1);
+            marker.appendChild(plane2);
+            marker.appendChild(plane3);
         }
-        marker.appendChild(newCircle);
-    }
-    function visualizacionMues(markerId, objeto){
-        const marker = document.getElementById(markerId);
-        if (!marker) return;
 
-        var newCircle = document.createElement('a-circle');
-        newCircle.setAttribute('id', 'new-circle-adn'); 
-        newCircle.setAttribute('radius', '0.3');
-        newCircle.setAttribute('color', 'blue');
-        newCircle.setAttribute('position', '-1.5 0 0'); 
-        newCircle.setAttribute('rotation', '-90 0 0');
-        newCircle.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
+        function visualizacionInc(markerId, objeto) {
+            const marker = document.getElementById(markerId);
+            if (!marker) return;
+            var newPlane = document.createElement('a-plane');
+            newPlane.setAttribute('id', 'new-plane');
+            newPlane.setAttribute('width', '1.2');
+            newPlane.setAttribute('height', '0.4');
+            newPlane.setAttribute('color', 'red');
+            newPlane.setAttribute('position', '0 0.5 1.9');
+            newPlane.setAttribute('rotation', '-90 0 0');
+            newPlane.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
 
-        var newText = document.createElement('a-text');
-        newText.setAttribute('value',`${objeto.message}\nID:\n${objeto.document.INCMUESTRA_ID}\nIncid. ID:\n${objeto.document.INCMUESTRA_INCID_ID}\nMues. ID:\n${objeto.document.INCMUESTRA_MUESTRA_ID}`); 
-        newText.setAttribute('align', 'center');
-        newText.setAttribute('position', '0 0 0.05');
-        newText.setAttribute('color', 'white');
-        newText.setAttribute('scale', '0.3 0.3 0.3'); 
-        newCircle.appendChild(newText);
+            var newText = document.createElement('a-text');
+            newText.setAttribute('value', `Codigo:${objeto.document.INCID_CODIGO}\nNombre:\n${objeto.document.TINCID_NOMBRE}\nDescripcion:\n${objeto.document.INCID_DESC}`);
+            newText.setAttribute('align', 'center');
+            newText.setAttribute('position', '0 0 0.05');
+            newText.setAttribute('color', 'white');
+            newText.setAttribute('scale', '0.3 0.3 0.3');
+            newPlane.appendChild(newText);
 
-        marker.appendChild(newCircle);
-    }
-    function visualizacionInc(markerId, objeto){
-        const marker = document.getElementById(markerId);
-        if (!marker) return;
-        var newPlane = document.createElement('a-plane');
-        newPlane.setAttribute('id', 'new-circle-adn'); 
-        newPlane.setAttribute('width', '1.2');
-        newPlane.setAttribute('height', '0.4');
-        newPlane.setAttribute('color', 'red');
-        newPlane.setAttribute('position', '-1.5 0 0.5'); 
-        newPlane.setAttribute('rotation', '-90 0 0');
-        newPlane.setAttribute('animation', 'property: rotation; to:  270 0 0; dur: 1000; easing: linear');
+            marker.appendChild(newPlane);
 
-        var newText = document.createElement('a-text');
-        newText.setAttribute('value',`Codigo:${objeto.document.INCID_CODIGO}\nNombre:\n${objeto.document.TINCID_NOMBRE}\nDescripcion:\n${objeto.document.INCID_DESC}`);
-        newText.setAttribute('align', 'center');
-        newText.setAttribute('position', '0 0 0.05');
-        newText.setAttribute('color', 'white');
-        newText.setAttribute('scale', '0.3 0.3 0.3'); 
-        newPlane.appendChild(newText);
-
-        marker.appendChild(newPlane);
-    }
+        }
 
     
 }
@@ -252,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function () {
         detailsBox.setAttribute('details-listener', '');
     }
 });
-  
 
     
     
