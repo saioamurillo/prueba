@@ -33,7 +33,7 @@ AFRAME.registerComponent('details-listener', {
             arText1.setAttribute('value', `Audio reconocido:\n${transcript}`);
 
             const textoNormalizado = transcript.replace(/[^\w\s]/gi, "");
-            if (textoNormalizado.includes("detalles caja 7063")) {
+            if (textoNormalizado.includes("detalles caja")) {
                 console.log("Te he escuchado");
                 
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
@@ -51,25 +51,9 @@ AFRAME.registerComponent('details-listener', {
                     })
                     .catch((error) => console.error(error));
                     
-            } else if (textoNormalizado.includes("ver detalles ADN")) {
-                console.log("Te he escuchado");
             
-                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-                fetch("https://207.180.229.60:9443/v1/api/CAJAS/7063", {
-                    method: "GET",
-                    headers: headers,
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        console.log(res);
-                        visualizacionADN('adn-marker', res);                      
-                    })
-                    .catch((error) => console.error(error));
             
-            }else if(textoNormalizado.includes("detalles muestra 9647")){
+            }else if(textoNormalizado.includes("detalles muestra")){
                     console.log("Te he escuchado");
                     
                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJhZG1pbiIsIkN1c3RvbU9iamVjdENhbkJlQWRkZWRIZXJlIl0sIm5iZiI6MTcxMjA1ODI5NSwiZXhwIjoxNzEyNjYzMDk1LCJpYXQiOjE3MTIwNTgyOTV9.wXM7RKCGWUR2hbAvZygQf4CV_CyA5H52eP4g-dNbyGo";
@@ -107,23 +91,24 @@ AFRAME.registerComponent('details-listener', {
                 var plane2ToRemove = document.getElementById('plane2')
                 var plane3ToRemove = document.getElementById('plane3')
                 var newPlaneToRemove = document.getElementById('new-plane')
+                var plane4ToRemove = document.getElementById('plane4');
+                var plane5ToRemove = document.getElementById('plane5')
+                var plane6ToRemove = document.getElementById('plane6')
 
 
-                if (plane1ToRemove&&plane2ToRemove&&plane3ToRemove&&newPlaneToRemove) {
+                if (plane1ToRemove) {
                     plane1ToRemove.parentNode.removeChild(plane1ToRemove);
                     plane2ToRemove.parentNode.removeChild(plane2ToRemove);
                     plane3ToRemove.parentNode.removeChild(plane3ToRemove);
-                    newPlaneToRemove.parentNode.removeChild(newPlaneToRemove);
+                    
 
+                } else if(plane4ToRemove){
+                    plane4ToRemove.parentNode.removeChild(plane4ToRemove);
+                    plane5ToRemove.parentNode.removeChild(plane5ToRemove);
+                    plane6ToRemove.parentNode.removeChild(plane6ToRemove);
+                    newPlaneToRemove.parentNode.removeChild(newPlaneToRemove);
                 }
-            } else if (textoNormalizado.includes("ocultar detalles adn")) {
-                console.log("Ocultar detalles ADN");
-            
-                var circleToRemove = document.getElementById('new-circle-adn');
-                if (circleToRemove) {
-                    circleToRemove.parentNode.removeChild(circleToRemove);
                 }
-            }
 
         };
 
@@ -197,7 +182,7 @@ AFRAME.registerComponent('details-listener', {
             const marker = document.getElementById(markerId);
             if (!marker) return;
             var plane1 = document.createElement('a-plane');
-            plane1.setAttribute('id', 'plane1');
+            plane1.setAttribute('id', 'plane4');
             plane1.setAttribute('position', '0 0 0.2');
             plane1.setAttribute('rotation', '-90 0 0');
             plane1.setAttribute('width', '1');
@@ -215,7 +200,7 @@ AFRAME.registerComponent('details-listener', {
             plane1.appendChild(text1);
 
             var plane2 = document.createElement('a-plane');
-            plane2.setAttribute('id', 'plane2');
+            plane2.setAttribute('id', 'plane5');
             plane2.setAttribute('position', '0 0 0.2');
             plane2.setAttribute('rotation', '-90 0 0');
             plane2.setAttribute('width', '1');
@@ -233,7 +218,7 @@ AFRAME.registerComponent('details-listener', {
             plane2.appendChild(text2);
 
             var plane3 = document.createElement('a-plane');
-            plane3.setAttribute('id', 'plane3');
+            plane3.setAttribute('id', 'plane6');
             plane3.setAttribute('position', '0 0 0.2');
             plane3.setAttribute('rotation', '-90 0 0');
             plane3.setAttribute('width', '1');
@@ -290,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
         detailsBox.setAttribute('details-listener', '');
     }
 });
-
     
     
 
